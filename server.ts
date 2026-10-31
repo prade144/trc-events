@@ -1,6 +1,7 @@
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
+import fs from "fs";
 import { Resend } from "resend";
 
 async function startServer() {
@@ -8,6 +9,15 @@ async function startServer() {
   const PORT = 3000;
 
   app.use(express.json());
+
+  // Canonical domain redirect middleware (non-www to www)
+  app.use((req, res, next) => {
+    const host = req.headers.host;
+    if (host && host.toLowerCase() === "theredcompany.co.in") {
+      return res.redirect(301, `https://www.theredcompany.co.in${req.originalUrl}`);
+    }
+    next();
+  });
 
   // Health check endpoint
   app.get("/api/health", (req, res) => {
@@ -142,6 +152,17 @@ async function startServer() {
   } else {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
+
+    // Serve prerendered static HTML for clean canonical routes
+    app.get(["/services", "/portfolio", "/about", "/contact"], (req, res, next) => {
+      const cleanPath = req.path.replace(/^\//, "");
+      const filePath = path.join(distPath, `${cleanPath}.html`);
+      if (fs.existsSync(filePath)) {
+        return res.sendFile(filePath);
+      }
+      next();
+    });
+
     app.get("*all", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });

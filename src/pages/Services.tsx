@@ -37,6 +37,7 @@ export default function Services() {
         title="Event Services | Weddings, Corporate Events & Concerts | The RED Company"
         description="Explore bespoke event management services in Bangalore by The RED Company: luxury wedding planning, destination weddings, corporate events, and live concerts."
         canonicalPath="/services"
+        ogImage="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200"
         schema={servicesSchema}
         breadcrumbs={[
           { name: "Home", item: "/" },

@@ -58,6 +58,7 @@ export default function Portfolio() {
         title="Event Portfolio & Past Works | The RED Company Bangalore"
         description="View our portfolio of luxury weddings, music festivals, corporate conferences, and private celebrations executed in Bangalore by The RED Company."
         canonicalPath="/portfolio"
+        ogImage="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=1200"
         breadcrumbs={[
           { name: "Home", item: "/" },
           { name: "Portfolio", item: "/portfolio" }

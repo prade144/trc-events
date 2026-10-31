@@ -9,6 +9,7 @@ export default function About() {
         title="About Us | Bangalore's Premier Event Architects | The RED Company"
         description="Learn about The RED Company: with over 10 years of event excellence in Bangalore, our event architects deliver luxury weddings, corporate galas, and live concerts."
         canonicalPath="/about"
+        ogImage="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=1200"
         breadcrumbs={[
           { name: "Home", item: "/" },
           { name: "About Us", item: "/about" }

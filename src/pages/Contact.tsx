@@ -34,6 +34,7 @@ export default function Contact() {
         title="Contact & Book Event Planners | The RED Company Bangalore"
         description="Contact The RED Company in Rajajinagar, Bangalore for luxury weddings, corporate gatherings, and live concerts. Call +91 82174 48031 or send an enquiry."
         canonicalPath="/contact"
+        ogImage="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=1200"
         breadcrumbs={[
           { name: "Home", item: "/" },
           { name: "Contact", item: "/contact" }

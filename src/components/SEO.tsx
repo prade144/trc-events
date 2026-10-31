@@ -16,8 +16,44 @@ export interface SEOProps {
   breadcrumbs?: BreadcrumbItem[];
 }
 
-const DOMAIN = "https://www.theredcompany.co.in";
+export const DOMAIN = "https://www.theredcompany.co.in";
 const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=1200";
+
+/**
+ * Normalizes and sanitizes a URL path to produce the strictly canonical www HTTPS URL.
+ * 1. Enforces primary domain https://www.theredcompany.co.in
+ * 2. Strips all query parameters (e.g. ?utm_source=..., ?gclid=..., ?fbclid=..., ?service=...)
+ * 3. Strips all hash fragments (#...)
+ * 4. Normalizes root to always end with trailing slash: https://www.theredcompany.co.in/
+ * 5. Normalizes subpages to clean, extensionless paths without trailing slash: https://www.theredcompany.co.in/services
+ */
+export function getCleanCanonicalUrl(rawPathOrUrl?: string): string {
+  if (!rawPathOrUrl) {
+    return `${DOMAIN}/`;
+  }
+
+  // Remove full domain/origin if passed
+  let clean = rawPathOrUrl.replace(/^https?:\/\/[^/]+/i, "");
+
+  // Strip query parameters and hash fragments (e.g. tracking params, utm, gclid, etc.)
+  clean = clean.split("?")[0].split("#")[0].trim();
+
+  // Ensure leading slash
+  if (!clean.startsWith("/")) {
+    clean = "/" + clean;
+  }
+
+  // Collapse consecutive slashes
+  clean = clean.replace(/\/+/g, "/");
+
+  // Root case: always canonicalize to https://www.theredcompany.co.in/
+  if (clean === "/" || clean === "") {
+    return `${DOMAIN}/`;
+  }
+
+  // Subpages: remove trailing slash (e.g. /services)
+  return `${DOMAIN}${clean.replace(/\/+$/, "")}`;
+}
 
 export default function SEO({
   title,
@@ -29,8 +65,9 @@ export default function SEO({
   breadcrumbs,
 }: SEOProps) {
   const location = useLocation();
+  // Strip tracking parameters whether passed explicitly or inferred from current route
   const currentPath = canonicalPath !== undefined ? canonicalPath : location.pathname;
-  const canonicalUrl = `${DOMAIN}${currentPath === "/" ? "" : currentPath.replace(/\/$/, "")}`;
+  const canonicalUrl = getCleanCanonicalUrl(currentPath);
 
   useEffect(() => {
     // 1. Update document title
@@ -100,7 +137,7 @@ export default function SEO({
           "@type": "ListItem",
           "position": idx + 1,
           "name": crumb.name,
-          "item": crumb.item.startsWith("http") ? crumb.item : `${DOMAIN}${crumb.item}`,
+          "item": getCleanCanonicalUrl(crumb.item),
         })),
       });
     }
