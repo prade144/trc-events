@@ -1,0 +1,9 @@
+# Robots.txt for The RED Company
+# https://www.theredcompany.co.in/
+
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://www.theredcompany.co.in/sitemap.xml
